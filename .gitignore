@@ -1,0 +1,39 @@
+# Secrets
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Node
+node_modules/
+dist/
+coverage/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Java
+target/
+.gradle/
+build/
+*.class
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Data and generated storage
+storage/chroma/*
+!storage/chroma/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep

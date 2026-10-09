@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mern-api:
+    build: ./backend/mern-api
+    env_file:
+      - ./backend/mern-api/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
+  ai-service:
+    build: ./ai-service
+    env_file:
+      - ./ai-service/.env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./storage/chroma:/app/storage/chroma
+
+  java-service:
+    build: ./backend/java-service
+    ports:
+      - "8080:8080"
+    profiles: ["java"]
+
+volumes:
+  mongo_data:
