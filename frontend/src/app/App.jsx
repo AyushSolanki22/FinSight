@@ -42,10 +42,34 @@ function useApp() {
 }
 
 const companies = [
-  { symbol: "NVDA", name: "NVIDIA", price: "$135.40", change: "+2.8%", tone: "positive" },
-  { symbol: "AAPL", name: "Apple", price: "$228.75", change: "+1.2%", tone: "positive" },
-  { symbol: "TSLA", name: "Tesla", price: "$342.10", change: "−0.6%", tone: "negative" },
-  { symbol: "MSFT", name: "Microsoft", price: "$428.20", change: "+0.9%", tone: "positive" },
+  {
+    symbol: "RELIANCE",
+    name: "Reliance Industries",
+    price: "₹1,463.20",
+    change: "+0.8%",
+    tone: "positive",
+  },
+  {
+    symbol: "TCS",
+    name: "Tata Consultancy Services",
+    price: "₹3,824.50",
+    change: "+1.1%",
+    tone: "positive",
+  },
+  {
+    symbol: "INFY",
+    name: "Infosys",
+    price: "₹1,638.75",
+    change: "+0.5%",
+    tone: "positive",
+  },
+  {
+    symbol: "HDFCBANK",
+    name: "HDFC Bank",
+    price: "₹1,716.30",
+    change: "−0.3%",
+    tone: "negative",
+  },
 ];
 
 const news = [
