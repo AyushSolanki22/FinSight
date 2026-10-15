@@ -198,6 +198,7 @@ def retrieve_filing_evidence(state: ResearchState) -> dict:
         return {"evidence": []}
 
     queries = list(state["filing_queries"])
+    targeted_queries = []
 
     question = next(
         (
@@ -215,6 +216,7 @@ def retrieve_filing_evidence(state: ResearchState) -> dict:
             "taxes paid net cash generated from operating activities",
             "cash generated from operations taxes paid net cash generated from operating activities",
         ]
+
     queries = targeted_queries + queries
 
     filters = []
@@ -264,7 +266,7 @@ def retrieve_filing_evidence(state: ResearchState) -> dict:
             })
 
     evidence.sort(key=lambda item: float(item.get("distance", float("inf"))))
-    return {"evidence": evidence[:20]}
+    return {"evidence": evidence[:10]}
 
 def call_model(state: ResearchState):
     api_key = os.getenv("GEMINI_API_KEY")

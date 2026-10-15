@@ -132,7 +132,18 @@ def _validated_facts(evidence: list[dict], extracted: ExtractionResult) -> list[
         
         if _normalize_text(fact.unit_text) not in source_norm:
             continue
-        if not _period_is_in_source(fact.fiscal_year, source_text):
+
+        source_period = source.get("fiscal_year")
+
+        if source_period:
+            fact_period_digits = re.sub(r"\D", "", fact.fiscal_year)
+            source_period_digits = re.sub(r"\D", "", str(source_period))
+            if fact_period_digits != source_period_digits:
+                continue
+        elif not _period_is_in_source(fact.fiscal_year, source_text):
+            continue
+
+        if fact.basis != "unspecified" and fact.basis not in source_norm:
             continue
 
         if fact.basis != "unspecified" and fact.basis not in source_norm:
