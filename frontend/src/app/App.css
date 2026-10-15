@@ -1528,3 +1528,275 @@ body {
     min-height: 260px;
   }
 }
+
+
+/* Minimalist theme */
+.app-shell.theme-bright {
+  --text: #202b27;
+  --muted: #748078;
+  --border: #e5e9e6;
+  --glass: #ffffff;
+  --glass-strong: #f5f7f5;
+  --field: #ffffff;
+  background: #f7f8f7;
+}
+
+.app-shell.theme-dark {
+  --text: #e9eeeb;
+  --muted: #a2ada6;
+  --border: #303a35;
+  --glass: #202723;
+  --glass-strong: #29312c;
+  --field: #181e1b;
+  background: #171c19;
+}
+
+/* Flat, readable surfaces */
+.theme-bright .sidebar,
+.theme-bright .topbar,
+.theme-bright .company-card,
+.theme-bright .news-list,
+.theme-bright .info-card,
+.theme-bright .about-hero,
+.theme-bright .developer-card,
+.theme-bright .chat-panel,
+.theme-bright .about-card {
+  border: 1px solid var(--border);
+  background: var(--glass);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.theme-dark .sidebar,
+.theme-dark .topbar,
+.theme-dark .company-card,
+.theme-dark .news-list,
+.theme-dark .info-card,
+.theme-dark .about-hero,
+.theme-dark .developer-card,
+.theme-dark .chat-panel,
+.theme-dark .about-card {
+  border: 1px solid var(--border);
+  background: var(--glass);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.theme-bright .welcome-card {
+  border: 1px solid #dce8e1;
+  background: #eaf3ed;
+  color: var(--text);
+  box-shadow: none;
+}
+
+.theme-bright .welcome-card .eyebrow {
+  color: #397057;
+}
+
+.theme-bright .welcome-card .muted {
+  color: #61746a;
+}
+
+.theme-dark .welcome-card {
+  border: 1px solid #35453b;
+  background: #26352d;
+  color: var(--text);
+  box-shadow: none;
+}
+
+.theme-dark .welcome-card .eyebrow,
+.theme-dark .welcome-card .muted {
+  color: #b4c7bb;
+}
+
+/* Remove decorative glass effects */
+.welcome-icon,
+.about-hero-art,
+.developer-card::before {
+  display: none;
+}
+
+.company-card:hover,
+.info-card:hover,
+.developer-card:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.theme-toggle,
+.small-tag,
+.developer-extra {
+  border: 1px solid var(--border);
+  background: var(--glass);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.chat-form {
+  border: 1px solid var(--border);
+  background: var(--field);
+  box-shadow: none;
+}
+
+.chat-form:focus-within {
+  border-color: #78a68d;
+  box-shadow: 0 0 0 2px rgba(53, 125, 83, 0.1);
+}
+
+.theme-dark .message:not(.user) p {
+  background: #29322d;
+}
+
+.theme-dark .nav-item.active,
+.theme-dark .nav-item:hover {
+  border-color: transparent;
+  background: #2b3931;
+}
+
+.theme-bright .nav-item.active,
+.theme-bright .nav-item:hover {
+  border-color: transparent;
+  background: #edf3ef;
+}
+
+
+
+/* Reference theme: warm white, charcoal, orange and violet */
+.app-shell.theme-bright {
+  --page: #f7f7f6;
+  --surface: #ffffff;
+  --surface-subtle: #f2f1ef;
+  --text: #3c3d49;
+  --muted: #73747d;
+  --border: #e9e8e6;
+  --accent: #ff7900;
+  --accent-soft: #fff1e4;
+  background: var(--page);
+}
+
+.app-shell.theme-dark {
+  --page: #202027;
+  --surface: #292932;
+  --surface-subtle: #32323c;
+  --text: #f0eff2;
+  --muted: #b1afb9;
+  --border: #41414b;
+  --accent: #ff8a22;
+  --accent-soft: #403127;
+  background: var(--page);
+}
+
+.sidebar,
+.topbar,
+.company-card,
+.news-list,
+.info-card,
+.about-hero,
+.developer-card,
+.chat-panel,
+.about-card {
+  border-color: var(--border);
+  background: var(--surface);
+  box-shadow: 0 3px 14px rgba(39, 34, 28, 0.035);
+}
+
+.brand,
+.topbar h1,
+.section-heading h2,
+.analysis-intro h2,
+.team-heading h3,
+.about-hero-copy h2,
+.developer-info h3 {
+  color: var(--text);
+}
+
+.eyebrow,
+.welcome-card .eyebrow {
+  color: var(--accent);
+}
+
+.nav-item {
+  color: var(--muted);
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.brand-mark,
+.chat-form button {
+  background: var(--accent);
+}
+
+.theme-toggle {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.welcome-card {
+  border-color: #f1dfce;
+  background: #fffaf5;
+  color: #3c3d49;
+  box-shadow: none;
+}
+
+.welcome-card .muted {
+  color: #73747d;
+}
+
+.company-icon,
+.profile-avatar,
+.message-avatar,
+.chat-spark {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.developer-avatar {
+  border: 1px solid #e9ddf6;
+  background: #f3edfa;
+  color: #7950a6;
+}
+
+.developer-role,
+.developer-card-bottom span:last-child {
+  color: var(--accent);
+}
+
+.theme-dark .welcome-card {
+  border-color: #554333;
+  background: #302b28;
+  color: var(--text);
+}
+
+.theme-dark .welcome-card .muted {
+  color: var(--muted);
+}
+
+.theme-dark .developer-avatar {
+  border-color: #51465e;
+  background: #393140;
+  color: #d3b8ef;
+}
+
+.theme-dark .message:not(.user) p {
+  border-color: var(--border);
+  background: var(--surface-subtle);
+  color: var(--text);
+}
+
+.theme-dark .chat-form {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.theme-dark .chat-form input {
+  color: var(--text);
+}
