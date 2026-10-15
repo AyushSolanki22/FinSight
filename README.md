@@ -1,16 +1,14 @@
 # FinSight
-### Evidence-grounded, multi-agent financial research for Indian listed companies
 
-FinSight is a project to explore how multi-agent AI can help research companies listed on the **National Stock Exchange of India (NSE)** and **BSE**. A user asks a natural-language question; the system is designed to gather financial data, retrieve evidence from company filings, run calculations with Python, verify key claims, and assemble an analyst-style report with traceable citations.
+FinSight is a financial research assistant prototype for exploring Indian listed companies. Users can ask questions through a chat-style interface, and the backend runs a research workflow to produce a written report.
 
-> **Project status:** Initial scaffold. The repository contains starter structure and service entry points; most agent workflows, data integrations, persistence, retrieval, and verification features still need to be implemented.
-
----
+> **Project status:** FinSight is an evolving prototype. The availability and quality of analysis depend on the data, integrations, and API credentials configured for the project. Verify important figures against official sources.
 
 ## Contents
 
-- [Problem](#problem)
-- [Goals](#goals)
+- [The problem](#the-problem)
+- [Project goals](#project-goals)
+- [Features](#features)
 - [Example query](#example-query)
 - [How it works](#how-it-works)
 - [Technology stack](#technology-stack)
@@ -18,390 +16,208 @@ FinSight is a project to explore how multi-agent AI can help research companies 
 - [Getting started](#getting-started)
 - [Configuration](#configuration)
 - [API endpoints](#api-endpoints)
-- [Reliability principles](#reliability-principles)
-- [Team workflow](#team-workflow)
-- [Development roadmap](#development-roadmap)
-- [Testing and evaluation](#testing-and-evaluation)
-- [Contributing](#contributing)
-- [Disclaimer](#disclaimer)
+- [Frontend commands](#frontend-commands)
+- [Team](#team)
+- [Responsible use](#responsible-use)
 
+## The problem
 
-## Problem
+Financial information about a company can be spread across filings, market data, and reports. Finding relevant information, comparing it, and turning it into a useful summary can take time. FinSight aims to make that research process easier by giving users one place to ask company-related questions and receive a structured response.
 
-Financial research often requires reading long filings, collecting data from multiple sources, calculating metrics consistently, and checking whether conclusions are supported by evidence. LLM-only answers can introduce unsupported claims or arithmetic mistakes.
+## Project goals
 
-FinSight is designed to address these problems by separating **retrieval, deterministic computation, interpretation, and verification** rather than asking one language model to do everything.
+- Make company research easier to start with natural-language questions.
+- Connect research questions to available company and market data.
+- Calculate useful metrics from available financial information.
+- Present findings in a clear report through a simple web interface.
+- Make the research workflow and its limitations understandable to users.
 
-## Goals
+## Features
 
-- Research a focused set of Indian listed companies.
-- Retrieve relevant evidence from annual reports and other company filings.
-- Calculate financial and stock metrics in Python, not in an LLM response.
-- Link factual claims to source documents and, where possible, page numbers.
-- Distinguish sourced facts, calculated values, interpretations, and uncertainty.
-- Evaluate numeric accuracy, citation quality, and retrieval performance.
+- React frontend built with Vite.
+- Home, Analysis, Features, Help, and About sections.
+- Bright and dark appearance modes.
+- Chat-style interface for submitting financial research questions.
+- FastAPI endpoints for health checks and analysis requests.
+- LangGraph-based research workflow.
+- Quantitative analysis of available financial statements and market data.
+- Backend support for selected Indian tickers: `RELIANCE`, `TCS`, `INFY`, `HDFCBANK`, and `ICICIBANK`.
+
+Demo company cards and prices should be treated as illustrative unless the application identifies them as live data.
 
 ## Example query
 
-> “How have Reliance Industries’ debt and profit margins changed over the last five years, and what risks did management highlight?”
+```text
+Summarize the available financial information about Reliance Industries.
+Include revenue, profitability, debt, and any notable risks in the data.
+```
 
-The intended report can include:
-- A concise company and period overview
-- Revenue, profit, debt, and margin trends
-- Selected stock-performance metrics
-- Risks explicitly disclosed by management
-- Citations to supporting filings or datasets
-- A verification summary and limitations
-
-The example is illustrative. It does not imply that the current scaffold already retrieves or calculates these results.
+A ticker can also be supplied with an API request, for example `RELIANCE`.
 
 ## How it works
 
-```text
-React Frontend
-      |
-      v
-MERN API (Express)
-      |
-      v
-Python AI Service (FastAPI)
-      |
-      v
-LangGraph Workflow
-  |          |           |
-  v          v           v
-Data      Filing/RAG    Risk
-Agent      Research     Agent
-  |          |           |
-  +----------+-----------+
-             |
-             v
-     Python Quant Engine
-             |
-             v
-       Verification
-             |
-             v
-       Report Assembly
-             |
-             v
-      Cited Research Report
-```
+1. The user submits a financial research question in the frontend.
+2. The frontend sends the question to the FastAPI analysis endpoint.
+3. The backend validates the request and supported ticker, if provided.
+4. The research workflow plans the analysis and gathers available evidence and data.
+5. Quantitative steps calculate metrics from the data that is available.
+6. The backend returns a written report to the frontend.
 
-### Main components
-
-1. **Planner Agent** — converts a research question into structured tasks.
-2. **Data Agent** — obtains and normalizes supported financial and market data.
-3. **Filing Research Agent** — retrieves relevant filing passages through RAG.
-4. **Risk Agent** — extracts management-disclosed risks with evidence.
-5. **Quant Engine** — computes supported metrics deterministically in Python.
-6. **Verification layer** — checks computed values and source metadata before publication.
-7. **Report Agent** — assembles the results into a readable report.
-
-The quant engine and validators should be ordinary, testable code wherever possible; they do not need to be autonomous LLM agents.
+The exact sources and calculations available depend on the project configuration and retrieved data. The prototype should not be assumed to provide complete coverage for every company or question.
 
 ## Technology stack
 
-| Layer | Technology | Responsibility |
-|---|---|---|
-| Frontend | React, Vite | Research UI, charts, report and citation views |
-| Main application API | Node.js, Express | API gateway and application endpoints |
-| Application database | MongoDB, Mongoose | Saved report metadata and future user/application data |
-| Optional Java service | Java, Spring Boot, Maven | A separate, clearly bounded service if needed |
-| AI API | Python, FastAPI | AI workflow entry point |
-| Agent orchestration | LangGraph | Workflow and agent coordination |
-| Retrieval | ChromaDB | Vector search over document chunks and metadata |
-| Quantitative analysis | Python, Pandas, NumPy | Reproducible calculations |
-| Deployment | Docker, Docker Compose | Local service orchestration |
-| Observability | Langfuse (planned) | Tracing and evaluation support |
-
-**Storage distinction:** ChromaDB is used for vector retrieval over unstructured filings. It is not a replacement for MongoDB or a structured financial database. Financial values should be stored in a consistent, validated structure with units, periods, and source information.
+| Area | Technologies |
+|---|---|
+| Frontend | React, Vite, React Router, Axios, Recharts, Lucide React |
+| Backend API | Python, FastAPI, Pydantic |
+| Research workflow | LangGraph |
+| AI providers | Groq, Google Gemini |
+| Data and storage | Yahoo Finance, ChromaDB, SQLite |
 
 ## Repository structure
 
 ```text
 FinSight/
-├── frontend/                    # React + Vite
-│   └── src/
-│       ├── app/                 # App shell and routes
-│       ├── pages/               # Research, analysis, dashboard, reports
-│       ├── components/          # Reusable UI components
-│       ├── services/            # API client
-│       └── styles/
 ├── backend/
-│   ├── mern-api/                # Node.js + Express + MongoDB
-│   │   └── src/
-│   │       ├── routes/
-│   │       ├── controllers/
-│   │       ├── services/
-│   │       ├── models/
-│   │       ├── middleware/
-│   │       └── database/
-│   └── java-service/            # Optional Spring Boot service
-├── ai-service/                  # Python + FastAPI
 │   └── app/
-│       ├── agents/
-│       ├── workflows/
-│       ├── rag/
-│       ├── quant/
-│       ├── verification/
-│       ├── evaluation/
-│       └── api/
-├── data/
-│   ├── raw/                     # Local source data; do not commit private/large files
-│   ├── processed/
-│   └── sample_data/
-├── storage/
-│   └── chroma/                  # Persistent local ChromaDB files
-├── scripts/                     # Ingestion and import scripts
-├── docs/                        # Architecture, API, evaluation notes
-├── docker-compose.yml
-└── README.md
+│       ├── agents/       # Research workflow and agents
+│       ├── quant/        # Financial calculations
+│       ├── tools/        # Market data and agent tools
+│       └── main.py       # FastAPI application and API routes
+├── frontend/
+│   └── src/
+│       ├── app/          # Application layout and shared state
+│       ├── pages/        # Home, Analysis, Features, Help, About
+│       ├── services/     # Frontend API integration
+│       └── styles/       # Application styles
+├── data/                 # Project data
+├── docs/                 # Documentation
+├── scripts/              # Utility scripts
+├── storage/              # Local database and vector-store data
+├── requirements.txt      # Python dependencies
+└── docker-compose.yml    # Docker configuration
 ```
 
 ## Getting started
 
-### Prerequisites
+### Requirements
 
-Install the tools relevant to the services you plan to run:
-
-- Git
+- Python 3.10 or later
 - Node.js and npm
-- Python 3.11+ (use a version compatible with the chosen dependencies)
-- MongoDB locally or a MongoDB connection URI
-- Java 21 and Maven only if you use `backend/java-service`
-- Docker Desktop / Docker Engine if using containers
+- API credentials for the providers used by the backend workflow
 
-### 1. Clone the repository
+### 1. Open the repository root
 
-```bash
-git clone <your-repository-url>
-cd FinSight
+Run the backend commands from the project root—the directory containing `requirements.txt` and the `backend` folder.
+
+```bat
+cd /d C:\Users\acer\GitHub\FinSight
 ```
 
-Replace `<your-repository-url>` with your team's Git repository URL.
+### 2. Create and activate a Python virtual environment
 
-### 2. Start the React frontend
-
-```bash
-cd frontend
-npm install
-```
-
-Copy `.env.example` to `.env` if needed, then start the development server:
-
-```bash
-npm run dev
-```
-
-Vite normally serves the frontend at `http://localhost:5173`.
-
-### 3. Start the MERN API
-
-In a separate terminal:
-
-```bash
-cd backend/mern-api
-npm install
-```
-
-Copy `.env.example` to `.env`, set `MONGODB_URI`, and start MongoDB. Then run:
-
-```bash
-npm run dev
-```
-
-The API is configured for `http://localhost:5000`. The current health route is:
-
-```text
-GET http://localhost:5000/api/v1/health
-```
-
-### 4. Start the Python AI service
-
-In a separate terminal:
-
-```bash
-cd ai-service
+```bat
 python -m venv .venv
+.venv\Scripts\activate
 ```
 
-Activate the environment:
+If `python` is not recognized, install Python, enable **Add Python to PATH**, and open a new terminal.
 
-```bash
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
+### 3. Install backend dependencies
 
-# macOS / Linux
-source .venv/bin/activate
+```bat
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-Install dependencies and start the API:
+### 4. Start the backend
 
-```bash
-pip install -r requirements.txt
+With the virtual environment active and the terminal at the repository root:
+
+```bat
+python -m uvicorn backend.app.main:app --reload --reload-dir backend
 ```
 
-Copy `.env.example` to `.env`, then run:
+The API should be available at <http://127.0.0.1:8000>. Leave this terminal running.
 
-```bash
-uvicorn app.main:app --reload --port 8000
+### 5. Install and start the frontend
+
+Open a second terminal:
+
+```bat
+cd /d C:\Users\acer\GitHub\FinSight\frontend
+npm install
+npm run dev
 ```
 
-Health check:
-
-```text
-GET http://localhost:8000/api/v1/health
-```
-
-The analysis endpoint is currently a scaffold and returns a placeholder response until the workflow is implemented.
-
-### 5. Run the Java service (optional)
-
-Use Java 21 and Maven:
-
-```bash
-cd backend/java-service
-mvn spring-boot:run
-```
-
-Health check:
-
-```text
-GET http://localhost:8080/api/v1/health
-```
-
-Only add this service to the active architecture if the team assigns it a specific responsibility that is not already handled by the MERN API or Python AI service.
-
-### Docker note
-
-A starter `docker-compose.yml` is included, but container orchestration should be treated as a template and may need adjustment as service implementations evolve. Create local `.env` files from the examples before starting the services. Do not put real API keys in source control.
+Open the URL printed by Vite, usually <http://localhost:5173>. Keep both terminals running while using the application.
 
 ## Configuration
 
-Configuration examples are provided at the root and within each service.
+Create a `.env` file in the repository root. Use `.env.example` as a template if it exists. The backend workflow discussed for this project requires credentials such as:
 
-| Variable | Used by | Purpose |
-|---|---|---|
-| `VITE_API_BASE_URL` | React | Base URL for the MERN API |
-| `PORT` | MERN API | Express server port |
-| `MONGODB_URI` | MERN API | MongoDB connection URI |
-| `FRONTEND_URL` | MERN API | Allowed frontend origin for CORS |
-| `AI_SERVICE_URL` | MERN API | Python AI service base URL |
-| `CHROMA_PERSIST_DIRECTORY` | AI service | ChromaDB persistence directory |
-| `CHROMA_COLLECTION_NAME` | AI service | Filing collection name |
-| `LLM_PROVIDER` | AI service | Selected model provider (planned) |
-| `LLM_API_KEY` | AI service | Model API key, if required |
-| `LLM_MODEL` | AI service | Model identifier, if required |
+```dotenv
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_google_gemini_api_key
+```
 
-Variable names and behavior may evolve during implementation. Never commit `.env` files, access tokens, or secrets.
+Keep real keys private. Do not place them in frontend files or commit them to Git. Check that `.env` is excluded by `.gitignore` before committing.
+
+After changing `.env`, restart the backend so it loads the updated configuration.
 
 ## API endpoints
 
-These are the initial scaffold endpoints, not a promise that all features are complete.
-
-### MERN API
-
-| Method | Endpoint | Status |
+| Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/v1/health` | Implemented health response |
-| `POST` | `/api/v1/analysis` | Route exists; requires AI service integration |
-| `GET` | `/api/v1/reports` | Placeholder |
-| `GET` | `/api/v1/reports/:reportId` | Placeholder |
+| `GET` | `/` | Confirms that the API is running |
+| `GET` | `/api/v1/health` | Returns the backend health status |
+| `POST` | `/api/v1/analysis` | Runs a research request |
 
-### Python AI service
+Interactive API documentation is available at <http://127.0.0.1:8000/docs> when the backend is running.
 
-| Method | Endpoint | Status |
-|---|---|---|
-| `GET` | `/api/v1/health` | Implemented health response |
-| `POST` | `/api/v1/analysis` | Placeholder response; workflow pending |
+### Analysis request
 
-### Java service
+```json
+{
+  "question": "Summarize the available financial information about Reliance Industries.",
+  "ticker": "RELIANCE",
+  "fiscal_year": null,
+  "start_date": null,
+  "end_date": null
+}
+```
 
-| Method | Endpoint | Status |
-|---|---|---|
-| `GET` | `/api/v1/health` | Implemented health response |
+The `question` field is required and must contain between 5 and 4,000 characters. The ticker is optional and must be supported by the backend. For a date range, provide both `start_date` and `end_date`; the end date must be later than the start date.
 
-## Reliability principles
+### Analysis response
 
-FinSight should follow these rules as features are implemented:
+```json
+{
+  "ticker": "RELIANCE",
+  "fiscal_year": null,
+  "report": "Research report text returned by the backend."
+}
+```
 
-- **Code computes numbers.** The LLM must not be the authority for arithmetic.
-- **Preserve provenance.** Store the source URL, document title, fiscal period, page number where available, retrieval date, unit, and relevant excerpt.
-- **Validate units and periods.** Do not compare figures with mismatched currencies, scales, fiscal periods, or consolidated/standalone bases.
-- **Distinguish claim types.**
-  - `Directly sourced`: explicitly stated in a source.
-  - `Calculated`: produced by a documented formula from known inputs.
-  - `Inferred`: an interpretation derived from evidence.
-  - `Uncertain`: evidence or data is insufficient.
-- **Fail visibly.** If a metric cannot be calculated or a citation cannot be validated, label it as unavailable/uncertain instead of fabricating a value.
-- **Keep research separate from advice.** Do not generate personalized buy/sell recommendations.
+## Frontend commands
 
-## Team workflow
+Run these commands from the `frontend` directory:
 
-A possible split for a team of 4–5:
+```bat
+npm run dev      # Start the development server
+npm run build    # Build the frontend
+npm run preview  # Preview a production build
+npm run lint     # Run the linter
+```
 
-- **Frontend:** React pages, charts, report display, citation viewer, API integration.
-- **MERN backend:** Express endpoints, MongoDB models, saved reports, request validation.
-- **AI/RAG:** PDF ingestion, chunking, embeddings, ChromaDB retrieval, citation metadata.
-- **Quant/verification:** deterministic formulas, input validation, number checks, evaluation dataset.
-- **Integration/Java/DevOps:** service contracts, Docker, tests, documentation, and a clearly scoped Java service if required.
+## Team
 
-Agree on API request/response schemas early. Keep work in feature branches and review changes through pull requests. Avoid having two services implement the same feature.
+- **Ayush Solanki** — Full Stack Developer; Coordination Support
+- **Divyansh Pratap Singh** — AI/ML Developer
+- **Ashwani Kumar** — Backend Developer
+- **Dev Gupta** — Team Member; Research & Presentation
 
-## Development roadmap
+## Responsible use
 
-### Phase 1 — Working vertical slice
-- Submit a company question from React.
-- Route it through Express to FastAPI.
-- Return a structured placeholder/report response.
-- Display status and errors in the UI.
-
-### Phase 2 — Data and quantitative metrics
-- Choose a small, fixed set of companies.
-- Import validated sample financial data.
-- Implement and unit-test CAGR, margins, debt change, returns, volatility, and drawdown where data is available.
-- Track source, units, and fiscal periods.
-
-### Phase 3 — Filing RAG
-- Ingest a limited set of annual reports.
-- Preserve page-level metadata.
-- Store chunks and embeddings in ChromaDB.
-- Return relevant excerpts with citations.
-
-### Phase 4 — Agents and verification
-- Build the LangGraph workflow.
-- Extract management-disclosed risks.
-- Validate calculations and citations.
-- Generate reports with claim labels and an explicit limitations section.
-
-### Phase 5 — Evaluation and demo readiness
-- Create a small gold-standard question set.
-- Measure numeric accuracy, citation correctness, retrieval relevance, and verification performance.
-- Add integration tests, Docker setup, and a documented demo flow.
-
-## Testing and evaluation
-
-At minimum, the team should test:
-
-- Financial formulas against hand-checked expected results.
-- Missing values, zero denominators, negative values, and mismatched units.
-- Whether retrieval returns the correct filing and page.
-- Whether citations actually support the associated claim.
-- Whether verification catches deliberately incorrect numbers.
-- API validation, error handling, and service-unavailable cases.
-
-Do not claim a specific accuracy percentage until it has been measured on a documented test set.
-
-## Contributing
-
-1. Create an issue describing the change.
-2. Create a feature branch, for example `feat/chroma-ingestion` or `feat/report-viewer`.
-3. Keep changes scoped to the service you own.
-4. Add or update tests and documentation.
-5. Open a pull request and request a teammate review.
-6. Never commit secrets, private credentials, or large/generated ChromaDB storage files.
-
-## Disclaimer
-
-FinSight is an educational and research project. It is not investment, legal, tax, or financial advice and must not be treated as a recommendation to buy, sell, or hold any security. Financial data can be incomplete, delayed, restated, or incorrectly interpreted. Users should independently verify source documents and consult qualified professionals before making financial decisions.
+FinSight is an educational research prototype, not personalized financial advice. Reports may be incomplete, delayed, or incorrect. Verify findings against official company filings and other reliable sources before making financial decisions.
