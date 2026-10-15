@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import "./App.css";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const AppContext = createContext(null);
 
@@ -267,16 +269,16 @@ function AnalysisPage() {
         message: { role: "assistant", text: data.report },
       });
     } catch (error) {
-  console.error("Analysis request failed:", error);
+      console.error("Analysis request failed:", error);
 
-  dispatch({
-    type: "ADD_MESSAGE",
-    message: {
-      role: "assistant",
-      text: "A server issue is occurring right now. Please try again in a little while.",
-    },
-  });
-} finally {
+      dispatch({
+        type: "ADD_MESSAGE",
+        message: {
+          role: "assistant",
+          text: "A server issue is occurring right now. Please try again in a little while.",
+        },
+      });
+    } finally {
       setIsTyping(false);
     }
   }
@@ -313,7 +315,15 @@ function AnalysisPage() {
                 <span className="message-avatar">
                   {message.role === "user" ? "A" : "F"}
                 </span>
-                <p>{message.text}</p>
+                {message.role === "assistant" ? (
+                  <div className="message-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {message.text || ""}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p>{message.text}</p>
+                )}
               </div>
             ))
           )}
@@ -396,35 +406,35 @@ function InfoPage({ page }) {
 
 function AboutPage() {
   const developers = [
-  {
-    initials: "AS",
-    name: "Ayush Solanki",
-    role: "Full Stack Developer",
-    extra: "Coordination Support",
-    number: "01",
-  },
-  {
-    initials: "DP",
-    name: "Divyansh Pratap Singh",
-    role: "AI/ML Developer",
-    extra: "",
-    number: "02",
-  },
-  {
-    initials: "AK",
-    name: "Ashwani Kumar",
-    role: "Backend Developer",
-    extra: "",
-    number: "03",
-  },
-  {
-    initials: "DG",
-    name: "Dev Gupta",
-    role: "Team Member",
-    extra: "Research & Presentation",
-    number: "04",
-  },
-];
+    {
+      initials: "AS",
+      name: "Ayush Solanki",
+      role: "Full Stack Developer",
+      extra: "Coordination Support",
+      number: "01",
+    },
+    {
+      initials: "DP",
+      name: "Divyansh Pratap Singh",
+      role: "AI/ML Developer",
+      extra: "",
+      number: "02",
+    },
+    {
+      initials: "AK",
+      name: "Ashwani Kumar",
+      role: "Backend Developer",
+      extra: "",
+      number: "03",
+    },
+    {
+      initials: "DG",
+      name: "Dev Gupta",
+      role: "Team Member",
+      extra: "Research & Presentation",
+      number: "04",
+    },
+  ];
 
   return (
     <section className="about-page">

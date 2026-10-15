@@ -1800,3 +1800,90 @@ body {
 .theme-dark .chat-form input {
   color: var(--text);
 }
+
+.message-content {
+  box-sizing: border-box;
+  max-width: 78%;
+  min-width: 0;
+  padding: 11px 14px;
+  border-radius: 4px 14px 14px 14px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #35423c;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.message-content > :first-child {
+  margin-top: 0;
+}
+
+.message-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* Keep the bubble on the wrapper, not on each Markdown paragraph. */
+.message:not(.user) .message-content > p {
+  max-width: none;
+  margin: 0 0 0.8em;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.message-content h1,
+.message-content h2,
+.message-content h3 {
+  margin: 1em 0 0.45em;
+  color: inherit;
+  line-height: 1.3;
+}
+
+.message-content h1 { font-size: 1.35em; }
+.message-content h2 { font-size: 1.2em; }
+.message-content h3 { font-size: 1.05em; }
+
+.message-content ul,
+.message-content ol {
+  margin: 0.4em 0 0.8em;
+  padding-left: 1.5em;
+}
+
+.message-content li {
+  margin: 0.25em 0;
+}
+
+.message-content a {
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+
+.message-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.message-content th,
+.message-content td {
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.message-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.theme-dark .message-content {
+  background: var(--surface-subtle);
+  color: var(--text);
+}
